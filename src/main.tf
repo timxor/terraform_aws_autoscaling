@@ -2,7 +2,8 @@
 #  1. declare infrastructure provider
 #  --------------------------------------------------------------------------------------------------------------------
 provider "aws" {
-  region = "${var.aws_region}"
+  version = "~> 1.0"
+  region = "us-east-1"
 }
 
 #  --------------------------------------------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ resource "aws_elb" "web-elb" {
 #  3. declare autoscaling group
 #  --------------------------------------------------------------------------------------------------------------------
 resource "aws_autoscaling_group" "web-asg" {
-  availability_zones = ["${split(",", var.availability_zones)}"]
+  availability_zones = "us-east-1"
   name = "terraform-example-asg"
   max_size = "${var.asg_max}"
   min_size = "${var.asg_min}"
@@ -104,7 +105,7 @@ resource "aws_security_group" "elb" {
 #  --------------------------------------------------------------------------------------------------------------------
 resource "aws_key_pair" "auth" {
   key_name = "github_rsa_key"
-  public_key = "${file("~/.ssh/github_rsa_key.pub")}"
+  public_key = "${file("~/.ssh/ohioUbuntuKey.pem")}"
 }
 
 #  --------------------------------------------------------------------------------------------------------------------
@@ -150,6 +151,7 @@ resource "aws_subnet" "default" {
 #  --------------------------------------------------------------------------------------------------------------------
 resource "aws_instance" "web" {
   connection {
+    host = "3.19.158.104"
     type = "ssh"
     user = "ubuntu"
     timeout = "2m"
